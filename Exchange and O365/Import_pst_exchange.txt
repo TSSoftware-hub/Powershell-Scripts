@@ -1,0 +1,56 @@
+https://docs.microsoft.com/en-us/exchange/recipients/mailbox-import-and-export/import-procedures?view=exchserver-2019
+
+
+New-MailboxImportRequest  [-Name <UniqueName>] -FilePath <UNCPathToPST> -Mailbox <TargetMailboxIdentity> [-IsArchive] [-SourceRootFolder <PSTFolder>] [-TargetRootFolder <MailboxFolder>] [-IncludeFolders <MailboxFolder1>,<MailboxFolder2>...] [-ExcludeFolders <MailboxFolder1>,<MailboxFolder2>...] [-Priority <PriorityValue>]
+
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+This example creates a new mailbox import request with these settings:
+
+Mailbox import request name: The default value MailboxImport is used, because we aren't using the Name parameter. The unique identity of the mailbox import request is <MailboxIdentity>\MailboxImportX (X is either not present, or has the value 0 to 9).
+
+Source .pst file: \SERVER01\PSTFiles\Archives\Vbarrios.pst
+
+Target mailbox: Valeria Barrios
+
+Content and folders: Content in all folder paths in the .pst file is replicated in the target mailbox. Content is merged under existing folders and new folders are created if they don't already exist.
+
+Priority: Normal, because we aren't using the Priority parameter.
+
+
+New-MailboxImportRequest-FilePath \\SERVER01\PSTFiles\Archives\Vbarrios.pst -Mailbox "Valeria Barrios"
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+This example creates a new mailbox import request with these settings:
+
+Mailbox import request name: The custom name Kathleen Reiter Import is specified by the Name parameter. Specifying a custom name allows more than 10 mailbox import requests for the mailbox. The unique identity value of the mailbox import request is <MailboxIdentity>\<MailboxImportRequestName> (for example, kreiter\Kathleen Reiter Import).
+
+Source .pst file: \SERVER01\PSTFiles\Archives\Recovered.pst
+
+Target mailbox: The archive mailbox for Kathleen Reiter (Kathleen's primary mailbox alias is kreiter).
+
+Content and folders: Only content in the Inbox folder of the .pst file is imported (regardless of the localized name of the folder), and it's imported to the Recovered Files folder in the target mailbox.
+
+Priority: High
+
+New-MailboxImportRequest -Name "Kathleen Reiter Import" -FilePath \\SERVER01\PSTFiles\Recovered.pst -Mailbox kreiter -IsArchive -IncludeFolders "#Inbox#" -TargetRootFolder "Recovered Files" -Priority High
+For detailed syntax and parameter information, see New-MailboxImportRequest.
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+How do you know this worked?
+To verify that you've successfully created a mailbox import request, do any of these steps:
+
+In the EAC, click the notification viewer Notifications icon to view the status of the request.
+
+If you created the mailbox import request in the EAC, and selected the option to send notification email messages, check the notification messages. The sender is Microsoft Exchange. The first message has the subject Your Import PST request has been received. If the import request completed successfully, you'll receive another message with the subject Import PST has finished.
+
+Replace <MailboxIdentity> with the name, email address, or alias of the target mailbox, and run this command in the Exchange Management Shell to verify the basic property values:
+
+Get-MailboxImportRequest -Mailbox "<MailboxIdentity>" | Format-List Name,FilePath,Mailbox,Status
+Replace <MailboxIdentity> and <MailboxImportRequestName> with the appropriate values, and run this command in the Exchange Management Shell to verify the details:
+
+
+Get-MailboxImportRequestStatistics -Identity "<MailboxIdentity>\<MailboxImportRequestName>"

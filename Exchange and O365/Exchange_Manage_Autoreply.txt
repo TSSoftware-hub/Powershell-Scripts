@@ -1,0 +1,16 @@
+To see who has autoreply set, run powershell script 
+Get-Mailbox | Get-MailboxAutoReplyConfiguration | Where-Object { $_.AutoReplyState –eq “scheduled” } | fl identity.
+
+or this 
+Get-Mailbox | Get-MailboxAutoReplyConfiguration | Where-Object { $_.AutoReplyState –eq “enabled” } | fl identity.
+
+To check autoreply for 1 user, run 
+Get-MailboxAutoReplyConfiguration –identity username
+
+To turn off, run 
+Set-MailboxAutoReplyConfiguration -Identity username -AutoReplyState disabled
+
+To turn off and clear reply text, run 
+Set-MailboxAutoReplyConfiguration -Identity username –AutoReplyState Disabled –ExternalMessage $null –InternalMessage $null
+
+

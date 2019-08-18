@@ -1,0 +1,1 @@
+.\Get-DisabledUserHistory.ps1 -Days 30 -SearchBase "OU=Staff,OU=Company,DC=mydomain,DC=com"

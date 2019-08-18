@@ -1,0 +1,8 @@
+Get-MailboxStatistics -identity "First Last" | fl DisplayName, TotalItemSize, ItemCount
+
+Get-Mailbox -identity email@domain.com | fl RecipientTypeDetails
+
+Set-Mailbox -Identity email@domain.com -Type shared
+
+
+

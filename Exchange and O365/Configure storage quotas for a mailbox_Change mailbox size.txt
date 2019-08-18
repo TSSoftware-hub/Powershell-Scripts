@@ -1,0 +1,25 @@
+Configure storage quotas for a mailbox/Change mailbox size
+
+//How do you know this worked?
+
+Get-Mailbox <identity> | fl DisplayName,IssueWarningQuota,ProhibitSendQuota,ProhibitSendReceiveQuota,UseDatabaseQuotaDefaults
+
+=======================================================================================================================================
+
+Get-ExecutionPolicy
+
+$LiveCred = Get-Credential
+
+//login here
+  
+$Session = New-PSSession -ConfigurationName Microsoft.Exchange -ConnectionUri https://ps.outlook.com/powershell -Credential $LiveCred -Authentication Basic -AllowRedirection
+  
+Import-PSSession $Session
+
+=======================================================================================================================================
+
+Set-Mailbox -Identity "First Last" -IssueWarningQuota 90gb -ProhibitSendQuota 95gb -ProhibitSendReceiveQuota 99gb -UseDatabaseQuotaDefaults $false
+
+=======================================================================================================================================
+
+Remove-PSSession $Session

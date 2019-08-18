@@ -1,0 +1,12 @@
+//need to install on a new machine
+Install-Module MSOnline
+
+...........................................................................................................................
+
+Get-ExecutionPolicy
+
+$LiveCred = Get-Credential
+
+Connect-AzureAD -Credential $LiveCred
+
+Get-MsolUser -All | ? {$_.isLicensed -eq $true -and $_.BlockCredential -eq $true} | select UserPrincipalName, IsLicensed, BlockCredential

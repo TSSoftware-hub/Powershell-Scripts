@@ -1,0 +1,21 @@
+Check is any rule applied to mailbox
+
+=======================================================================================================================================
+
+Get-ExecutionPolicy
+
+$LiveCred = Get-Credential
+
+//login here
+  
+$Session = New-PSSession -ConfigurationName Microsoft.Exchange -ConnectionUri https://ps.outlook.com/powershell -Credential $LiveCred -Authentication Basic -AllowRedirection
+  
+Import-PSSession $Session
+
+=======================================================================================================================================
+
+Get-InboxRule -Mailbox mailbox@company.com
+
+=======================================================================================================================================
+
+Remove-PSSession $Session

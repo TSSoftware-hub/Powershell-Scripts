@@ -1,0 +1,98 @@
+Use the Exchange Management Shell to create a mailbox export request
+To create a mailbox export request, use this syntax:
+
+
+New-MailboxExportRequest  [-Name <UniqueName>] -Mailbox <TargetMailboxIdentity> -FilePath <UNCPathToPST> [-IsArchive] [-SourceRootFolder <MailboxFolder>] [-TargetRootFolder <PSTFolder>] [-IncludeFolders <MailboxFolder1>,<MailboxFolder2>...] [-ExcludeFolders <MailboxFolder1>,<MailboxFolder2>...] [-ContentFilter <Filter>] [-Priority <PriorityValue>]
+This example creates a new mailbox export request with these settings:
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+Mailbox export request name: The default value MailboxExport is used, because we aren't using the Name parameter. The unique identity of the mailbox export request is <MailboxIdentity>\MailboxExportX (X is either not present, or has the value 0 to 9).
+
+Source mailbox: First Last
+
+Target .pst file: \SERVER01\PSTFiles\PSTName.pst
+
+Content and folders: Content in all folder paths in the source mailbox is replicated in the target .pst file.
+
+Priority: Normal, because we aren't using the Priority parameter.
+
+
+New-MailboxExportRequest -Mailbox "First Last" -FilePath \\SERVER01\PSTFiles\PSTName.pst
+This example creates a new mailbox export request with these settings:
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+Mailbox export request name: The custom name  Export is specified by the Name parameter. Specifying a custom name allows more than 10 mailbox export requests for the mailbox. The unique identity value of the mailbox export request is <MailboxIdentity>\<MailboxExportRequestName> (for example, Last\First Last Export).
+
+Source mailbox: The archive mailbox for First Last (First's primary mailbox alias is last).
+
+Target .pst file: \SERVER01\PSTFiles\Archives\PSTName.pst
+
+Content and folders: Only content in the Inbox folder of the mailbox is exported (regardless of the localized name of the folder).
+
+Priority: High
+
+New-MailboxExportRequest -Name "First Last Export" -Mailbox last -FilePath "\\SERVER01\PSTFiles\PSTName.pst" -IsArchive -IncludeFolders "#Inbox#" -Priority Hight
+For detailed syntax and parameter information, see New-MailboxExportRequest.
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+How do you know this worked?
+To verify that you've successfully created a mailbox export request, do any of these steps:
+
+In the EAC, click the notification viewer Notifications icon to view the status of the request.
+
+If you created the mailbox export request in the EAC, and selected the option to send notification email messages, check the notification messages. The sender is Microsoft Exchange. The first message has the subject Your Export PST request has been received. If the export request completed successfully, you'll receive another message with the subject Export PST has finished.
+
+Replace <MailboxIdentity> with the name, email address, or alias of the source mailbox, and run this command in the Exchange Management Shell to verify the basic property values:
+
+
+Get-MailboxExportRequest -Mailbox "<MailboxIdentity>" | Format-List Name,FilePath,Mailbox,Status
+Replace <MailboxIdentity> and <MailboxExportRequestName> with the appropriate values, and run this command in the Exchange Management Shell to verify the details:
+
+
+Get-MailboxExportRequestStatistics -Identity "<MailboxIdentity>\<MailboxExportRequestName>"
+Use the Exchange Management Shell to view mailbox export requests
+By default, the Get-MailboxExportRequest cmdlet returns the name, source mailbox, and status of mailbox export requests. If you pipeline the command to the Format-List cmdlet, you'll only get a limited number of additional useful details:
+
+FilePath: The target .pst file.
+
+RequestGUID: The unique GUID value of the mailbox export request.
+
+RequestQueue: The mailbox database that the export request is being run on.
+
+BatchName: The optional batch name for the mailbox export request.
+
+Identity: The unique identity value of the mailbox export request (<MailboxIdentity>\ <MailboxExportRequestName>).
+
+By default, the Get-MailboxExportRequestStatistics cmdlet returns the name, status, alias of the source mailbox, and the completion percentage of mailbox export requests. If you pipeline the command to the Format-List cmdlet, you'll see detailed information about the mailbox export request.
+
+This example returns the summary list of all mailbox export requests.
+
+
+Get-MailboxExportRequest
+This example returns additional information for mailbox export requests from the mailbox Akia Al-Zuhairi.
+
+
+Get-MailboxExportRequest -Mailbox "Akia Al-Zuhairi" | Format-List
+This example returns the summary list of in-progress mailbox export requests for mailboxes that reside on the mailbox database named DB01.
+
+
+Get-MailboxExportRequest -Status InProgress -Database DB01
+This example returns the summary list of completed mailbox export requests in the batch named Export DB01 PSTs.
+
+
+Get-MailboxExportRequest -Status Completed -BatchName "Export DB01 PSTs"
+For detailed syntax and parameter information, see Get-MailboxExportRequest.
+
+To view detailed information about a mailbox export request, use this syntax:
+
+
+Get-MailboxExportRequestStatistics -Identity <MailboxExportRequestIdentity> [-IncludeReport] | Format-List
+Where <MailboxExportRequestIdentity> is the identity value of the mailbox export request (<MailboxIdentity>\ <MailboxExportRequestName> or <RequestGUID>).
+
+This example returns detailed information for the mailbox export request named MailboxExport for Akia Al-Zuhairi's mailbox, including the log of actions in the Report property.
+
+
+Get-MailboxExportRequestStatistics -Identity "aal-zuhairi\MailboxExport" -IncludeReport | Format-List

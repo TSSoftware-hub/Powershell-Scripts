@@ -1,0 +1,48 @@
+PS C:\WINDOWS\system32> Get-MailboxPermission -Identity email@domain.com -User "First Last"
+ 
+Identity User AccessRights IsInherited Deny
+-------- ---- ------------ ----------- ----
+First Last email@domain... {DeleteItem} False False
+ 
+ 
+PS C:\WINDOWS\system32> Get-MailboxPermission -Identity email@domain.com -User "First Last" | fl
+Creating a new session for implicit remoting of "Get-MailboxPermission" command...
+ 
+ 
+RunspaceId : some_id_here
+AccessRights : {DeleteItem}
+Deny : False
+InheritanceType : All
+User : email@domain.com
+Identity : First Last
+IsInherited : False
+IsValid : True
+ObjectState : Unchanged
+ 
+PS C:\WINDOWS\system32> Remove-MailboxPermission -Identity email@domain.com -User "First Last" -AccessRights DeleteItem
+ 
+Confirm
+Are you sure you want to perform this action?
+Removing mailbox permission "email@domain.com" for user "First Last" with access rights "'DeleteItem'".
+[Y] Yes [A] Yes to All [N] No [L] No to All [?] Help (default is "Y"): Y
+PS C:\WINDOWS\system32> Get-MailboxPermission -Identity email@domain.com -User "First Last" | fl
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32> Add-MailboxPermission -Identity "First Last" -User "First Last" -AccessRights FullAccess -AutoMapping $false
+ 
+Identity User AccessRights IsInherited Deny
+-------- ---- ------------ ----------- ----
+First Last NXXXXXXX6\$1XXE... {FullAccess} False False
+ 
+ 
+PS C:\WINDOWS\system32> Get-MailboxPermission -Identity email@domain.com -User "First Last" | fl
+ 
+ 
+RunspaceId : some_id_here
+AccessRights : {FullAccess}
+Deny : False
+InheritanceType : All
+User : email@domain.com
+Identity : First Last
+IsInherited : False
+IsValid : True
+ObjectState : Unchanged

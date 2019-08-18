@@ -1,0 +1,1 @@
+powershell -ExecutionPolicy ByPass -File C:\Temp\STUnpin-Start-Taskbar-W10.ps1

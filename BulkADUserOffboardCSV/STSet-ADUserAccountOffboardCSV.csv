@@ -1,0 +1,3 @@
+Name,SamAccountName,AccountPassword,Path,AccountExpires
+Bob Yellow,byellow,Tst1@ccnt,"ou=Users,ou=MYDOMAIN,dc=mydomain,dc=com",10/19/2018
+Jack Box,jbox,Tst2@ccnt,"ou=Users,ou=MYDOMAIN,dc=mydomain,dc=com",10/19/2018

@@ -1,0 +1,31 @@
+MailBox: Remove/Add/Get a List of delegates
+
+=====================================================================================================================================
+
+Get-ExecutionPolicy
+
+$LiveCred = Get-Credential
+
+//login here
+  
+$Session = New-PSSession -ConfigurationName Microsoft.Exchange -ConnectionUri https://ps.outlook.com/powershell -Credential $LiveCred -Authentication Basic -AllowRedirection
+  
+Import-PSSession $Session
+
+=====================================================================================================================================
+
+//get a list of all delegates
+
+Get-CalendarProcessing -identity <identity> | select-object ResourceDelegates
+
+//remove all delegates
+
+Set-CalendarProcessing -Identity <identity> -ResourceDelegates $null
+
+//add delegates
+
+ Set-CalendarProcessing -Identity <identity> -ResourceDelegates  <comma separated list of identities>
+
+=====================================================================================================================================
+
+Remove-PSSession $Session

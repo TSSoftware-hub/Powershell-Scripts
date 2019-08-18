@@ -1,0 +1,33 @@
+PowerShell commands to export all records about all meetings for conf rooms on a 4th floor in the building address
+
+1 Use desired start date
+2 Use desired end date
+3 Use desired location for exported files
+4 After export apply filter, and review all active meetings
+- Show all real items on calendar (ParentDisplay = Calendar)
+- Notify user/initiator/author (SenderEmailAddress field, at the end of string)
+- Notify all attendees (DisplayAttendeesAll field, exclude Not Found)
+
+=====================================================================================================================================
+
+Get-ExecutionPolicy
+
+$LiveCred = Get-Credential
+
+//login here
+
+$Session = New-PSSession -ConfigurationName Microsoft.Exchange -ConnectionUri https://ps.outlook.com/powershell -Credential $LiveCred -Authentication Basic -AllowRedirection
+  
+Import-PSSession $Session
+
+====================================================================================================================================
+
+//roomName
+
+Get-CalendarDiagnosticObjects -Identity "Room Name" -StartDate 5/22/2018 -EndDate 1/1/2019 | Export-Csv "C:\Users\userName\Documents\roomName_Meetings.csv" -NoTypeInformation
+
+=================================================================================================================================
+
+Remove-PSSession $Session
+
+Exit

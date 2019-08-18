@@ -1,0 +1,29 @@
+Convert Mailbox
+
+//command
+
+Set-Mailbox -Identity <MailboxIdentity> -Type <Regular | Room | Equipment | Shared> [-Password (ConvertTo-SecureString -String '<Password>' -AsPlainText -Force)] [-EnableRoomMailboxAccount <$true | $false> [-RoomMailboxPassword (ConvertTo-SecureString -String '<Password>' -AsPlainText -Force)] [-ResetPasswordOnNextLogon <$true | $false>]
+
+//check
+
+Get-Mailbox -Identity <MailboxIdentity> | Format-List Name,RecipientTypeDetails,UserPrincipalName,AccountDisabled
+
+====================================================================================================================================
+
+Get-ExecutionPolicy
+
+$LiveCred = Get-Credential
+
+//login here
+  
+$Session = New-PSSession -ConfigurationName Microsoft.Exchange -ConnectionUri https://ps.outlook.com/powershell -Credential $LiveCred -Authentication Basic -AllowRedirection
+  
+Import-PSSession $Session
+
+=====================================================================================================================================
+
+Set-Mailbox "Room Name" -Type Room
+
+=====================================================================================================================================
+
+Remove-PSSession $Session

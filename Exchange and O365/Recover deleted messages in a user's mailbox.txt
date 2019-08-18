@@ -1,0 +1,66 @@
+Recover deleted messages in a user's mailbox
+
+//link
+
+https://technet.microsoft.com/en-us/library/ff660637(v=exchg.160).aspx
+
+//command
+
+
+
+========================================================================================================================================
+
+Get-ExecutionPolicy
+
+$LiveCred = Get-Credential
+
+//login here
+  
+$Session = New-PSSession -ConfigurationName Microsoft.Exchange -ConnectionUri https://ps.outlook.com/powershell -Credential $LiveCred -Authentication Basic -AllowRedirection
+  
+Import-PSSession $Session
+
+========================================================================================================================================
+
+//Use the Exchange Management Shell to search for messages
+This example searches for messages in April Stewart's mailbox that meet the following criteria:
+
+Sender: Ken Kwok
+
+Keyword: Seattle
+
+Search-Mailbox "April Stewart" -SearchQuery "from:'Ken Kwok' AND seattle" -TargetMailbox "Discovery Search Mailbox" -TargetFolder "April Stewart Recovery" -LogLevel Full
+
+//Use the Exchange Management Shell to restore messages
+This example restores messages to April Stewart's mailbox and deletes them from the Discovery Search Mailbox.
+
+Search-Mailbox "Discovery Search Mailbox" -SearchQuery "from:'Ken Kwok' AND seattle" -TargetMailbox "April Stewart" -TargetFolder "Recovered Messages" -LogLevel Full -DeleteContent
+
+//Use the Exchange Management Shell to export and import messages from a .pst file
+In Exchange 2016, you can export contents from a mailbox to a .pst file and import the contents of a .pst file to a mailbox. To learn more about mailbox import and export, see Mailbox import and export requests. You can't perform this task in Exchange Online.
+
+This example uses the following settings to export messages from the folder April Stewart Recovery in the Discovery Search Mailbox to a .pst file:
+
+Mailbox   Discovery Search Mailbox
+
+Source folder   April Stewart Recovery
+
+ContentFilter   April travel plans
+
+PST file path   \\MYSERVER\HelpDeskPst\AprilStewartRecovery.pst
+
+New-MailboxExportRequest -Mailbox "Discovery Search Mailbox" -SourceRootFolder "April Stewart Recovery" -ContentFilter {Subject -eq "April travel plans"} -FilePath \\MYSERVER\HelpDeskPst\AprilStewartRecovery.pst
+
+This example uses the following settings to import messages from a .pst file to the folder Recovered By Helpdesk in April Stewart's mailbox:
+
+Mailbox   April Stewart
+
+Target folder   Recovered By Helpdesk
+
+PST file path   \\MYSERVER\HelpDeskPst\AprilStewartRecovery.pst
+
+New-MailboxImportRequest -Mailbox "April Stewart" -TargetRootFolder "Recovered By Helpdesk" -FilePath \\MYSERVER\HelpDeskPst\AprilStewartRecovery.pst
+
+=====================================================================================================================================
+
+Remove-PSSession $Session

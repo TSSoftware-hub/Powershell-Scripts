@@ -1,0 +1,61 @@
+//connect to the Exchange
+
+Get-ExecutionPolicy
+
+$LiveCred = Get-Credential
+
+$Session = New-PSSession -ConfigurationName Microsoft.Exchange -ConnectionUri https://ps.outlook.com/powershell -Credential $LiveCred -Authentication Basic -AllowRedirection
+
+
+Import-PSSession $Session
+
+
+Remove-PSSession $Session
+
+
+//an example of OOO
+
+<html>
+<body>
+Thank you for your message. First Last no longer works with CompanyName. Please direct future communication to
+email@domain.com.<br>
+-
+</body>
+</html>
+
+
+
+//check mailbox Size and Items count
+
+Get-MailboxStatistics -identity "First Last" | fl DisplayName, TotalItemSize, ItemCount
+
+//check mailbox tipe
+
+Get-Mailbox -identity email@domain.com | fl RecipientTypeDetails
+
+//convert mailbox to shared
+
+Set-Mailbox -Identity email@domain.com -Type shared
+
+//remove full access
+Remove-MailboxPermission -Identity email@domain.com -User "First Last" -AccessRights FullAccess
+
+//turn off auto-reply
+
+Set-MailboxAutoReplyConfiguration -Identity email@domain.com -AutoReplyState disabled
+
+//check auto-reply status
+
+Get-MailboxAutoReplyConfiguration –identity email@domain.com
+
+//remove Send On Behalf
+
+Set-CalendarProcessing -Identity email@domain.com -ResourceDelegates $null
+
+//check delegates for calendar (send on behalf)
+
+Get-CalendarProcessing -identity email@domain.com | select-object ResourceDelegates
+
+//check full access to mailbox
+
+Get-MailboxPermission -Identity email@domain.com
